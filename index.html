@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="img/logo2.jpg">
+    <title>YTDropiX</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* --- Variables de Color y Sombra --- */
+        :root {
+            --bg-color: #f0f2f5;             /* Fondo gris claro/blanco */
+            --card-bg-color: #ffffff;        /* Fondo blanco para tarjetas */
+            --text-color-dark: #333333;      /* Texto oscuro */
+            --text-color-light: #666666;     /* Texto gris más claro */
+            --neon-pink: #FF007F;            /* Rosa Neón primario */
+            --neon-pink-light: #FF3399;      /* Rosa Neón más claro para degradados */
+            --neon-glow-strong: rgba(255, 0, 127, 0.7); /* Brillo intenso */
+            --neon-glow-soft: rgba(255, 0, 127, 0.3);   /* Brillo suave */
+            --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.08); /* Sombra ligera */
+            --shadow-medium: 0 10px 30px rgba(0, 0, 0, 0.15); /* Sombra media */
+            --border-radius-xl: 30px;        /* Bordes ultra-redondeados */
+            --border-radius-l: 20px;
+            --transition-speed: 0.4s;
+        }
+
+        /* --- Reseteo y Estilos Base --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px; /* Padding general para pantallas pequeñas */
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- Contenedor Principal (Tarjeta Flotante) --- */
+        .container {
+            background: var(--card-bg-color);
+            padding: 3rem;
+            border-radius: var(--border-radius-xl);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: var(--shadow-medium); /* Sombra flotante */
+            position: relative;
+            z-index: 10; /* Asegura que esté encima de otras cosas */
+
+            /* Animación de entrada */
+            opacity: 0;
+            transform: translateY(30px) scale(0.98);
+            animation: fadeInScale 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInScale {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* --- Títulos y Subtítulos --- */
+        h1 {
+            font-family: 'Montserrat', sans-serif; /* Fuente llamativa para el título principal */
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--neon-pink);
+            background-image: linear-gradient(45deg, var(--neon-pink), var(--neon-pink-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px var(--neon-glow-soft);
+            margin-bottom: 0.5rem;
+            animation: neonPulse 2.5s infinite alternate ease-in-out;
+        }
+
+        @keyframes neonPulse {
+            from { text-shadow: 0 0 10px var(--neon-glow-soft), 0 0 20px var(--neon-glow-soft); }
+            to { text-shadow: 0 0 20px var(--neon-glow-strong), 0 0 30px var(--neon-glow-strong); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-color-light);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        /* --- Campo de Entrada --- */
+        .input-group {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color-light);
+            font-size: 1.2rem;
+            transition: color var(--transition-speed) ease;
+        }
+
+        .YouTube { /* Usamos tu clase */
+            width: 100%;
+            padding: 18px 25px 18px 60px; /* Espacio para el icono */
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            background-color: #f8f8f8;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius-xl);
+            color: var(--text-color-dark);
+            outline: none;
+            transition: all var(--transition-speed) ease;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05); /* Sombra interna suave */
+        }
+
+        .YouTube::placeholder {
+            color: #b0b0b0;
+        }
+
+        .YouTube:focus {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 0 3px var(--neon-glow-soft); /* Anillo de foco neón */
+        }
+
+        .YouTube:focus + i {
+            color: var(--neon-pink);
+        }
+
+        /* --- Botones --- */
+        .Get { /* Usamos tu clase */
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-pink-light));
+            border: none;
+            border-radius: var(--border-radius-xl);
+            color: white;
+            padding: 16px 35px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            transition: all var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 8px 25px var(--neon-glow-soft);
+            margin-top: 15px; /* Espacio entre botones */
+            position: relative;
+            overflow: hidden; /* Para el efecto de brillo */
+        }
+
+        .Get:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 12px 35px var(--neon-glow-strong);
+            /* Animación de brillo "swipe" */
+        }
+        .Get::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: skewX(-30deg);
+            transition: all var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .Get:hover::before {
+            left: 100%;
+        }
+
+        .Get i {
+            font-size: 1.2rem;
+        }
+        
+        /* --- Contenedor Oculto (para botones de descarga dinámicos) --- */
+        .hidden { /* Usamos tu clase */
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); /* Transición elástica */
+            margin-top: 0;
+            padding-top: 0;
+        }
+
+        .hidden.active {
+            max-height: 600px; /* Suficiente para varios botones */
+            opacity: 1;
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+            overflow-y: auto;
+        }
+
+        .hidden h3 {
+            color: var(--neon-pink);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            text-shadow: 0 0 5px var(--neon-glow-soft);
+        }
+        
+        .hidden p {
+            color: var(--text-color-light);
+            margin-bottom: 1rem;
+        }
+
+        /* --- Spinner de Carga --- */
+        .spinner {
+            border: 5px solid #e0e0e0;
+            border-top: 5px solid var(--neon-pink);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite; /* Animación elástica */
+            margin: 30px auto;
+            box-shadow: 0 0 15px var(--neon-glow-soft);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        /* --- Barra Lateral (Sidebar) --- */
+        .open-btn {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            background: none;
+            border: none;
+            color: var(--neon-pink);
+            font-size: 2.2rem;
+            cursor: pointer;
+            z-index: 101; /* Siempre visible */
+            transition: transform var(--transition-speed) ease, text-shadow var(--transition-speed) ease;
+            text-shadow: 0 0 10px var(--neon-glow-soft);
+        }
+
+        .open-btn:hover {
+            transform: scale(1.1);
+            text-shadow: 0 0 20px var(--neon-glow-strong);
+        }
+
+        .sidebar {
+            height: 100vh;
+            width: 300px;
+            position: fixed;
+            z-index: 100;
+            top: 0;
+            left: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85)); /* Fondo claro con degradado */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-right: 2px solid var(--neon-pink);
+            box-shadow: 10px 0 40px rgba(0, 0, 0, 0.1),
+                        5px 0 25px var(--neon-glow-soft);
+            padding-top: 80px;
+            transform: translateX(-100%);
+            transition: transform var(--transition-speed) cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transición elástica */
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-options {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .sidebar-options li {
+            padding: 20px 30px;
+            font-size: 1.3rem;
+            color: var(--text-color-dark);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all var(--transition-speed) ease;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        .sidebar-options li:last-child {
+            border-bottom: none;
+        }
+
+        .sidebar-options li i {
+            color: var(--neon-pink);
+            font-size: 1.5rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .sidebar-options li:hover {
+            background-color: var(--neon-pink);
+            color: white;
+            padding-left: 40px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-options li:hover i {
+            color: white;
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .sidebar-options li::before { /* Animación de "resplandor" al pasar el ratón */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+        .sidebar-options li:hover::before {
+            transform: translateX(100%);
+        }
+
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+        
+
+        /* --- Notificación de Descarga (Temporal) --- */
+        #downloadNotification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-pink-light));
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--border-radius-xl);
+            box-shadow: 0 5px 20px var(--neon-glow-strong);
+            font-weight: 500;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+        }
+        #downloadNotification.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-10px);
+        }
+        #downloadNotification img {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--border-radius-l);
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        #downloadNotification .notification-content h4 {
+            font-size: 1.1rem;
+            margin-bottom: 2px;
+        }
+        #downloadNotification .notification-content p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* --- Media Queries para Responsive --- */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            .subtitle {
+                font-size: 1rem;
+            }
+            .Get {
+                padding: 14px 25px;
+                font-size: 1rem;
+            }
+            .sidebar {
+                width: 250px;
+            }
+            .sidebar-options li {
+                font-size: 1.1rem;
+                padding: 15px 25px;
+            }
+            .sidebar-options li i {
+                font-size: 1.3rem;
+            }
+            .open-btn {
+                font-size: 1.8rem;
+                top: 20px;
+                left: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 1.5rem;
+                border-radius: 20px;
+            }
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 0.2rem;
+            }
+            .subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 1.5rem;
+            }
+            .YouTube {
+                padding: 12px 20px 12px 50px;
+                font-size: 0.9rem;
+            }
+            .input-group i {
+                left: 15px;
+                font-size: 1rem;
+            }
+            .Get {
+                padding: 12px 20px;
+                font-size: 0.95rem;
+                gap: 8px;
+            }
+            .hidden.active {
+                margin-top: 1.5rem;
+                padding-top: 1rem;
+            }
+            .hidden h3 {
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+            }
+            .spinner {
+                width: 40px;
+                height: 40px;
+                border-width: 4px;
+            }
+            .sidebar {
+                width: 100%; /* Ocupa todo el ancho en móviles */
+                border-right: none;
+                box-shadow: none;
+            }
+            .open-btn {
+                top: 15px;
+                left: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="open-btn" id="openBtn">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="sidebar" class="sidebar">
+        <ul class="sidebar-options">
+            <li onclick="window.location.href='index.html'">
+                <i class="fas fa-home"></i> Inicio
+            </li>
+            <li onclick="window.location.href='descargas.html'">
+                <i class="fas fa-download"></i> Mis Descargas
+            </li>
+            <li onclick="window.location.href='discord.html'">
+                <i class="fab fa-discord"></i> Discord
+            </li>
+        </ul>
+        <footer class="sidebar-footer">
+            Creado por Asierito - © 2025
+        </footer>
+    </div>
+
+    <div class="container" id="mainContainer">
+        <h1>YTDropiX</h1>
+        <p class="subtitle">Descarga canciones de YouTube</p>
+
+        <div class="input-group">
+            <i class="fas fa-link"></i>
+            <input type="text" id="urlInput" class="YouTube" placeholder="Pega la URL del video aquí...">
+        </div>
+        
+        <input type="hidden" class="idList">
+
+        <button class="Get" onclick="Get()">
+            <i class="fas fa-search"></i> Obtener Información
+        </button>
+
+        
+        <div id="loading" class="spinner" style="display: none;"></div>
+
+        <div class="hidden">
+            </div>
+
+            <footer> Creado por Asierito </footer>
+    </div>
+
+    <div id="downloadNotification" class="">
+        <img src="" alt="Thumbnail" id="notificationThumbnail">
+        <div class="notification-content">
+            <h4 id="notificationTitle"></h4>
+            <p><i class="fas fa-spinner fa-spin"></i> Descargando...</p>
+        </div>
+    </div>
+
+
+    <script>
+        // --- Referencias a elementos del DOM ---
+        var YouTube = document.querySelector('.YouTube');
+        var idList = document.querySelector('.idList');
+        var hidden = document.querySelector('.hidden');
+        var loadingSpinner = document.getElementById('loading');
+        var sidebar = document.getElementById('sidebar');
+        var downloadNotification = document.getElementById('downloadNotification');
+        var notificationThumbnail = document.getElementById('notificationThumbnail');
+        var notificationTitle = document.getElementById('notificationTitle');
+        var mainContainer = document.getElementById('mainContainer'); // Para cerrar sidebar
+
+        // --- Lógica de la Barra Lateral ---
+        
+        // Función para abrir/cerrar la barra lateral
+        document.getElementById('openBtn').addEventListener('click', function(e) {
+            e.stopPropagation(); // Evita que el clic se propague al documento
+            sidebar.classList.toggle('active');
+        });
+
+        // Cerrar al hacer clic fuera de la sidebar o en el contenedor principal
+        document.addEventListener('click', (e) => {
+            if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && e.target.id !== 'openBtn') {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // --- Lógica de Descarga ---
+
+        // Función para mostrar el spinner y procesar la URL
+        function Get() {
+            // Ocultar botones si ya estaban visibles
+            hidden.classList.remove('active');
+            
+            // Mostrar el spinner
+            loadingSpinner.style.display = 'block';
+
+            let videoId = "";
+            let url = YouTube.value.trim();
+
+            if (url === "") {
+                alert("Por favor, ingresa una URL de YouTube.");
+                loadingSpinner.style.display = 'none';
+                return;
+            }
+
+            if (url.includes("youtu.be/")) {
+                videoId = url.split("youtu.be/")[1].split("?")[0];
+            } else if (url.includes("youtube.com/watch?v=")) {
+                videoId = new URL(url).searchParams.get("v");
+            } else if (url.includes("youtube.com/shorts/")) {
+                videoId = url.split("youtube.com/shorts/")[1].split("?")[0];
+            } else {
+                alert('Introduce una URL válida de YouTube (video o short).');
+                loadingSpinner.style.display = 'none';
+                return;
+            }
+
+            if (!videoId) {
+                alert('No se pudo extraer el ID del video de la URL proporcionada.');
+                loadingSpinner.style.display = 'none';
+                return;
+            }
+            
+            idList.value = videoId;
+            // Llamamos a la primera API (MP3) para obtener el título y mostrar botones iniciales
+            getVideoInfo(videoId);
+        }
+
+        // Función para obtener información del video y mostrar botones
+        async function getVideoInfo(videoId) {
+            const apiUrl = `https://youtube-mp36.p.rapidapi.com/dl?id=${videoId}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'X-RapidAPI-Key': '2b929025ddmshd3302ab633a818cp1ab4cdjsne14ca95e2a8d',
+                        'X-RapidAPI-Host': 'youtube-mp36.p.rapidapi.com'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data || !data.title) {
+                    alert("No se pudo obtener la información del video. Inténtalo de nuevo.");
+                    loadingSpinner.style.display = 'none';
+                    return;
+                }
+
+                // Ocultar el spinner y mostrar los botones de descarga
+                loadingSpinner.style.display = 'none';
+                hidden.classList.add('active'); // Muestra el contenedor
+
+                // Crear botones de descarga dinámicamente
+                mostrarBotonesDescarga(videoId, data.title, data.thumbnail); // Pasamos thumbnail
+            } catch (error) {
+                console.error("Error al obtener los datos:", error);
+                alert("Hubo un problema al procesar la solicitud o la API no respondió.");
+                loadingSpinner.style.display = 'none';
+            }
+        }
+
+        function mostrarBotonesDescarga(videoId, title, thumbnailUrl) {
+            let contenedor = document.querySelector('.hidden');
+            contenedor.innerHTML = `
+                <button 
+                    onclick="ocultarOpciones()" 
+                    style="
+                        position: absolute; 
+                        top: 20px; 
+                        right: 20px; 
+                        background: none; 
+                        border: none; 
+                        color: var(--text-color-light); 
+                        font-size: 1.5rem; 
+                        cursor: pointer;
+                        transition: color 0.3s ease;
+                    "
+                >
+                    <i class="fas fa-times"></i>
+                </button>
+                <h3 style="margin-bottom: 1rem;">Opciones para: <br>"${title}"</h3>
+                <div style="margin-bottom: 1.5rem;">
+                    <img src="${thumbnailUrl}" alt="Miniatura del video" style="width: 150px; height: auto; border-radius: ${getComputedStyle(document.documentElement).getPropertyValue('--border-radius-l')}; box-shadow: var(--shadow-light);">
+                </div>
+                <button class="Get" onclick="downloadMP3('${videoId}', '${title}', '${thumbnailUrl}')">
+                    <i class="fas fa-music"></i> Descargar MP3
+                </button>
+                <button class="Get" onclick="obtenerEnlacesMP4('${videoId}', '${title}', '${thumbnailUrl}')">
+                    <i class="fas fa-video"></i> Proximamente...
+                </button>
+            `;
+        }
+
+        // --- Nueva Función para Cerrar el Panel de Opciones ---
+        function ocultarOpciones() {
+            // Referencia al contenedor de opciones
+            const hiddenContainer = document.querySelector('.hidden');
+            
+            // 1. Oculta el panel
+            hiddenContainer.classList.remove('active');
+
+            // 2. Limpia su contenido (opcional, pero recomendable)
+            hiddenContainer.innerHTML = '';
+            
+            // 3. Limpia el campo de URL (opcional, para una nueva búsqueda)
+            document.getElementById('urlInput').value = '';
+        }
+        // --- Fin de la Nueva Función ---
+        
+        // Función para descargar MP3 (Adaptada a async/await y notificaciones)
+        async function downloadMP3(videoId, title, thumbnailUrl) {
+            // 1. Mostrar notificación de INICIO de descarga (isDownloading = true)
+            // Asegúrate de que tu función showDownloadNotification acepte estos 4 parámetros
+            showDownloadNotification(title, thumbnailUrl, 'MP3', true); 
+            
+            loadingSpinner.style.display = 'block'; 
+            hidden.classList.remove('active'); 
+            
+            const apiUrl = `https://youtube-mp36.p.rapidapi.com/dl?id=${videoId}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'X-RapidAPI-Key': '2b929025ddmshd3302ab633a818cp1ab4cdjsne14ca95e2a8d',
+                        'X-RapidAPI-Host': 'youtube-mp36.p.rapidapi.com'
+                    }
+                });
+                const data = await response.json();
+
+                loadingSpinner.style.display = 'none';
+                hidden.classList.add('active'); 
+                
+                if (!data || !data.link) {
+                    // Fallo: cerramos la notificación y mostramos una alerta simple
+                    hideDownloadNotification();
+                    alert("No se pudo obtener la descarga en MP3.");
+                    return;
+                }
+
+                // --- Ejecutar Descarga ---
+                const anchor = document.createElement("a");
+                anchor.href = data.link;
+                anchor.download = `${title}.mp3`;
+                document.body.appendChild(anchor);
+                anchor.click();
+                document.body.removeChild(anchor);
+
+                // Asume un tamaño simulado (la API gratuita no suele darlo)
+                const simulatedSize = '5.0'; 
+                saveToHistory(title, thumbnailUrl, 'MP3', simulatedSize);
+                
+                // 2. Mostrar notificación de ÉXITO y activar auto-cierre de 3 segundos (isDownloading = false)
+                showDownloadNotification(title, thumbnailUrl, 'MP3', false); 
+
+            } catch (error) {
+                loadingSpinner.style.display = 'none';
+                hideDownloadNotification();
+                hidden.classList.add('active');
+                console.error("Error al descargar MP3:", error);
+                alert("Hubo un problema al descargar el MP3.");
+            }
+        }
+
+        // Función para obtener enlaces MP4 (esta es la que llama el botón MP4)
+        async function obtenerEnlacesMP4(videoId, title, thumbnailUrl) {
+            // Mostrar el spinner y ocultar botones
+            loadingSpinner.style.display = 'block';
+            hidden.classList.remove('active');
+
+            // Re-usamos el videoId y title ya obtenidos
+            idList.value = videoId;
+            obtenerInfoMP4(videoId, title, thumbnailUrl); // Pasamos el título y thumbnail
+        }
+
+        // Función para obtener información del video y mostrar botones MP4
+        async function obtenerInfoMP4(videoId, title, thumbnailUrl) {
+            const apiUrlMP4 = `https://ytstream-download-youtube-videos.p.rapidapi.com/dl?id=${videoId}`
+
+            try {
+                const response = await fetch(apiUrlMP4, {
+                    method: 'GET',
+                    headers: {
+                        'X-RapidAPI-Key': 'fc4991b217msh36f1b876c8ae922p1b1704jsn43d51f09c612',
+                        'X-RapidAPI-Host': 'ytstream-download-youtube-videos.p.rapidapi.com'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data || !data.formats || data.formats.length === 0) {
+                    alert("No se pudo obtener la información de MP4. Inténtalo de nuevo.");
+                    loadingSpinner.style.display = 'none';
+                    return;
+                }
+
+                // Ocultar el spinner y mostrar los botones de descarga
+                loadingSpinner.style.display = 'none';
+                hidden.classList.add('active');
+
+                // Usamos el título y thumbnail que ya teníamos de la primera llamada
+                mostrarBotonesDescargaMP4(title, data.formats, thumbnailUrl);
+            } catch (error) {
+                console.error("Error al obtener los datos de MP4:", error);
+                alert("Hubo un problema al procesar la solicitud de MP4.");
+                loadingSpinner.style.display = 'none';
+            }
+        }
+
+        // Función para mostrar los botones de descarga para MP4 con calidades
+        function mostrarBotonesDescargaMP4(title, formats, thumbnailUrl) {
+            let contenedor = document.querySelector('.hidden');
+            contenedor.innerHTML = `
+                <h3>MP4: "${title}"</h3>
+                <div style="margin-bottom: 1.5rem;">
+                    <img src="${thumbnailUrl}" alt="Miniatura del video" style="width: 150px; height: auto; border-radius: ${getComputedStyle(document.documentElement).getPropertyValue('--border-radius-l')}; box-shadow: var(--shadow-light);">
+                </div>
+                <p style="margin-bottom: 1rem; color: var(--text-color-light);">Selecciona la calidad de video:</p>
+            `;
+
+            // Filtramos para obtener solo formatos con video y audio (no 'adaptiveFormats' que son solo audio/video)
+            // Y ordenamos por calidad descendente
+            const videoFormats = formats.filter(f => f.qualityLabel && f.url && f.contentLength)
+                                        .sort((a, b) => {
+                                            const qualityA = parseInt(a.qualityLabel);
+                                            const qualityB = parseInt(b.qualityLabel);
+                                            return qualityB - qualityA; // Orden descendente
+                                        });
+
+            if (videoFormats.length === 0) {
+                 contenedor.innerHTML += `<p>No se encontraron formatos de video directo (MP4) con calidad y tamaño.</p>`;
+                 return;
+            }
+
+            videoFormats.forEach(format => {
+                const fileSizeMB = (format.contentLength / (1024 * 1024)).toFixed(1); // Convertir a MB
+                const btn = document.createElement("button");
+                btn.innerText = `Descargar ${format.qualityLabel} (${fileSizeMB}MB)`;
+                btn.classList.add("Get");
+                btn.onclick = () => descargarMP4(format.url, title, format.qualityLabel, thumbnailUrl, fileSizeMB);
+                contenedor.appendChild(btn);
+            });
+        }
+
+        // Función para descargar MP4 (simplificada, ya que la API da URL directa)
+        async function descargarMP4(url, title, quality, thumbnailUrl, fileSize) {
+            showDownloadNotification(title, thumbnailUrl, `${quality} MP4`); // Muestra notificación
+
+            try {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${title} (${quality}).mp4`; // Nombre de archivo
+                a.target = '_blank'; // Abrir en nueva pestaña puede ayudar a iniciar la descarga
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                // Guardar en historial
+                saveToHistory(title, thumbnailUrl, `MP4 ${quality}`, fileSize);
+                
+                setTimeout(() => { // Ocultar notificación después de un tiempo
+                    hideDownloadNotification();
+                    alert(`Descargando MP4 ${quality} de "${title}"!`); // Confirmación
+                }, 2000); // 2 segundos para que se vea la notificación
+
+            } catch (error) {
+                console.error("Error al descargar el archivo MP4:", error);
+                alert("No se pudo descargar el archivo. Por favor, inténtalo de nuevo.");
+                hideDownloadNotification();
+            }
+        }
+        
+        // --- Lógica del Historial ---
+        function saveToHistory(title, thumbnailUrl, format, fileSize = 'N/A') {
+            try {
+                const historial = JSON.parse(localStorage.getItem('historialDescargas')) || [];
+
+                // Solo agregar si no es un duplicado exacto reciente
+                const isDuplicate = historial.some(item => 
+                    item.title === title && 
+                    item.thumbnail === thumbnailUrl && 
+                    item.format === format
+                );
+                
+                if (!isDuplicate) {
+                    historial.unshift({ // Añadir al principio para que los más recientes salgan primero
+                        title: title,
+                        thumbnail: thumbnailUrl,
+                        format: format,
+                        fileSize: fileSize,
+                        timestamp: new Date().toLocaleString()
+                    });
+                    // Limitar el historial a, por ejemplo, los últimos 10 elementos
+                    if (historial.length > 10) {
+                        historial.pop(); 
+                    }
+                    localStorage.setItem('historialDescargas', JSON.stringify(historial));
+                    loadDownloadHistory(); // Recargar el historial en la interfaz
+                }
+            } catch (e) {
+                console.error("Error al guardar en localStorage:", e);
+            }
+        }
+
+        function loadDownloadHistory() {
+            const historial = JSON.parse(localStorage.getItem('historialDescargas')) || [];
+            const historyList = document.getElementById('historyList');
+            const downloadHistoryContainer = document.getElementById('downloadHistory');
+            historyList.innerHTML = ''; // Limpiar el contenedor actual
+
+            if (historial.length > 0) {
+                downloadHistoryContainer.style.display = 'block'; // Mostrar la sección del historial
+                historial.forEach(item => {
+                    const historyItem = document.createElement('div');
+                    historyItem.classList.add('history-item');
+                    historyItem.innerHTML = `
+                        <img src="${item.thumbnail}" alt="Miniatura">
+                        <div class="history-item-info">
+                            <h4>${item.title}</h4>
+                            <p>Formato: ${item.format}</p>
+                            <p>Tamaño: ${item.fileSize !== 'N/A' ? item.fileSize + 'MB' : 'Desconocido'}</p>
+                            <p class="history-item-status"><i class="fas fa-check-circle"></i> Descargado</p>
+                        </div>
+                    `;
+                    historyList.appendChild(historyItem);
+                });
+            } else {
+                downloadHistoryContainer.style.display = 'none'; // Ocultar si no hay historial
+            }
+        }
+
+        // Cargar el historial al iniciar la página
+        document.addEventListener('DOMContentLoaded', loadDownloadHistory);
+
+
+       // --- Notificaciones (MEJORADA para Descarga Finalizada y Auto-cierre) ---
+        let notificationTimeout;
+        
+        function showDownloadNotification(title, thumbnailUrl, format = 'Archivo', isDownloading = true) {
+            clearTimeout(notificationTimeout); // Limpiar cualquier auto-cierre pendiente
+
+            const notificationText = isDownloading 
+                ? `<i class="fas fa-spinner fa-spin"></i> Iniciando descarga de ${format}...`
+                : `<i class="fas fa-check-circle" style="color: #4CAF50;"></i> **¡Descarga Finalizada!** ${format} listo.`;
+
+            // Actualizar el contenido de la notificación
+            notificationThumbnail.src = thumbnailUrl;
+            notificationTitle.innerHTML = title;
+            document.querySelector('#downloadNotification .notification-content p').innerHTML = notificationText;
+
+            // Mostrar la notificación
+            downloadNotification.classList.add('show');
+            
+            // Si no está descargando (es decir, la descarga ya finalizó), la ocultamos en 3 segundos.
+            if (!isDownloading) {
+                // 🔑 CLAVE: Auto-cierre después de 3 segundos (3000ms)
+                notificationTimeout = setTimeout(() => {
+                    hideDownloadNotification();
+                }, 3000);
+            }
+        }
+
+        function hideDownloadNotification() {
+            downloadNotification.classList.remove('show');
+            clearTimeout(notificationTimeout); // Asegurar que el temporizador se limpia si se cierra manualmente
+        }
+        // --- Fin de Notificaciones ---
+
+
+        // --- Código de Electron (Mantengo el try-catch para evitar errores en navegadores) ---
+        try {
+            const { app, BrowserWindow } = require('electron');
+
+            function createWindow() {
+            const win = new BrowserWindow({
+                width: 800,
+                height: 600,
+                webPreferences: {
+                nodeIntegration: true
+                }
+            });
+
+            win.loadURL("https://tusitio.github.io"); // tu web en GitHub
+            }
+
+            // app.whenReady().then(createWindow); // Descomentar si realmente usas Electron
+        } catch (e) {
+            if (e.message.includes("require is not defined")) {
+                console.log("Modo navegador detectado. Omitiendo código de Electron.");
+            } else {
+                console.error("Error de Electron:", e);
+            }
+        }
+
+    </script>
+</body>
+</html>
