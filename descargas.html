@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YTDropiX - Historial de Descargas</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* --- Variables de Color y Sombra (Necesarias) --- */
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg-color: #ffffff;
+            --text-color-dark: #333333;
+            --text-color-light: #666666;
+            --neon-pink: #FF007F;
+            --neon-pink-light: #FF3399;
+            --neon-glow-strong: rgba(255, 0, 127, 0.7);
+            --neon-glow-soft: rgba(255, 0, 127, 0.3);
+            --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --border-radius-xl: 30px;
+            --border-radius-l: 20px;
+            --transition-speed: 0.4s;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color-dark); 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; /* Alineación arriba para permitir scroll */
+            min-height: 100vh; 
+            padding: 40px 20px; 
+        }
+
+        /* --- Contenedor Principal --- */
+        .container { 
+            background: var(--card-bg-color); 
+            padding: 3rem; 
+            border-radius: var(--border-radius-xl); 
+            width: 90%; 
+            max-width: 800px; 
+            text-align: center; 
+            box-shadow: var(--shadow-medium); 
+            position: relative; 
+            margin-top: 50px; /* Espacio para el botón de volver */
+        }
+        
+        h2 { 
+            font-family: 'Montserrat', sans-serif; 
+            font-size: 2.5rem; 
+            font-weight: 800; 
+            color: var(--neon-pink); 
+            text-shadow: 0 0 15px var(--neon-glow-soft); 
+            margin-bottom: 2rem; 
+        }
+
+        /* --- Botón Volver a Inicio --- */
+        .BackBtn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--neon-pink);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px var(--neon-glow-soft);
+            transition: all 0.3s ease;
+            z-index: 20;
+        }
+        .BackBtn:hover { transform: scale(1.1); box-shadow: 0 8px 20px var(--neon-pink-light); }
+        
+        /* --- Estilos del Historial (Clave) --- */
+        #historyList { 
+            text-align: left; 
+            padding-top: 10px;
+        }
+        .history-item {
+            display: flex;
+            align-items: center;
+            background-color: #fcfcfc; /* Ligeramente diferente al fondo */
+            border-radius: var(--border-radius-l);
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--neon-pink); /* Borde de acento */
+        }
+        .history-item:hover {
+            transform: translateY(-3px) scale(1.005);
+            box-shadow: 0 8px 25px rgba(255, 0, 127, 0.2);
+        }
+        .history-item img {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--border-radius-l);
+            object-fit: cover;
+            margin-right: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .history-item-info {
+            flex-grow: 1;
+            min-width: 0;
+        }
+        .history-item-info h4 {
+            font-size: 1.1rem;
+            color: var(--text-color-dark);
+            margin-bottom: 5px;
+            font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .history-item-info p {
+            font-size: 0.9rem;
+            color: var(--text-color-light);
+            margin-bottom: 3px;
+        }
+        .history-item-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-align: right;
+            padding-left: 15px;
+        }
+        .history-item-details span {
+            display: block;
+            margin-bottom: 3px;
+            color: var(--text-color-dark);
+        }
+        .history-item-details .size {
+            color: var(--neon-pink);
+            font-weight: 600;
+        }
+        .history-item-details .time {
+            color: #999;
+            font-size: 0.75rem;
+            font-weight: 400;
+        }
+        .history-item-details i {
+            margin-right: 5px;
+        }
+        
+        /* --- Mensaje Sin Historial --- */
+        #noHistoryMessage {
+            color: var(--text-color-light);
+            font-size: 1.2rem;
+            padding: 40px;
+        }
+        
+        /* --- Botón Limpiar Historial --- */
+        .clear-btn {
+            background: var(--neon-pink);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-l);
+            padding: 10px 25px;
+            font-size: 1rem;
+            margin-top: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px var(--neon-glow-soft);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .clear-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px var(--neon-glow-strong);
+        }
+        
+        /* --- Media Query para móviles --- */
+        @media (max-width: 600px) {
+            .container { padding: 2rem 1.5rem; }
+            h2 { font-size: 2rem; margin-top: 20px; }
+            .history-item { 
+                flex-direction: column; 
+                align-items: flex-start; 
+                padding: 10px;
+                border-left: none;
+                border-top: 3px solid var(--neon-pink);
+            }
+            .history-item img { 
+                margin-bottom: 10px; 
+                width: 60px;
+                height: 60px;
+            }
+            .history-item-details { 
+                width: 100%; 
+                align-items: flex-start; 
+                border-top: 1px dashed #eee; 
+                padding-top: 10px; 
+                margin-top: 10px; 
+                padding-left: 0; 
+            }
+            .history-item-info h4 { 
+                white-space: normal; 
+                overflow: visible; 
+                text-overflow: clip; 
+            }
+            .BackBtn { top: 10px; left: 10px; }
+        }
+    </style>
+</head>
+<body onload="loadDownloadHistory()">
+
+    <div class="container">
+        <button class="BackBtn" onclick="window.location.href='index.html'">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+
+        <h2><i class="fas fa-download"></i> Historial de Descargas</h2>
+        
+        <div id="noHistoryMessage" style="display:none;">
+            <i class="fas fa-box-open" style="font-size: 3rem; color: #ccc; margin-bottom: 10px;"></i>
+            <p>Aún no hay elementos en tu historial de descargas.</p>
+        </div>
+
+        <div id="historyList">
+            </div>
+
+        <button class="clear-btn" id="clearBtn" onclick="clearHistory()" style="display:none;">
+            <i class="fas fa-trash-alt"></i> Borrar Todo el Historial
+        </button>
+
+    </div>
+
+    <script>
+        /**
+         * Función para leer los datos del historial de localStorage y mostrarlos en la interfaz.
+         */
+        function loadDownloadHistory() {
+            try {
+                // Leer el historial desde localStorage. Si no existe, usar un array vacío.
+                const historial = JSON.parse(localStorage.getItem('historialDescargas')) || [];
+                const historyList = document.getElementById('historyList');
+                const noHistoryMessage = document.getElementById('noHistoryMessage');
+                const clearBtn = document.getElementById('clearBtn');
+                
+                historyList.innerHTML = ''; // Limpiar el contenedor antes de llenarlo.
+
+                if (historial.length > 0) {
+                    noHistoryMessage.style.display = 'none';
+                    clearBtn.style.display = 'inline-flex'; // Mostrar el botón de limpiar
+                    
+                    historial.forEach(item => {
+                        const historyItem = document.createElement('div');
+                        historyItem.classList.add('history-item');
+                        
+                        const fileSize = item.fileSize !== 'N/A' ? item.fileSize + ' MB' : 'Desconocido';
+                        const time = item.timestamp || 'Fecha Desconocida';
+                        
+                        historyItem.innerHTML = `
+                            <img src="${item.thumbnail}" alt="Miniatura">
+                            <div class="history-item-info">
+                                <h4>${item.title}</h4>
+                                <p>Formato: ${item.format}</p>
+                            </div>
+                            <div class="history-item-details">
+                                <span class="size"><i class="fas fa-database"></i> ${fileSize}</span>
+                                <span class="time"><i class="far fa-clock"></i> ${time}</span>
+                            </div>
+                        `;
+                        historyList.appendChild(historyItem);
+                    });
+                } else {
+                    noHistoryMessage.style.display = 'block'; // Mostrar mensaje de que no hay historial
+                    clearBtn.style.display = 'none'; // Ocultar el botón de limpiar
+                }
+            } catch (e) {
+                console.error("Error al cargar el historial:", e);
+                document.getElementById('noHistoryMessage').innerText = "Error al cargar el historial.";
+                document.getElementById('noHistoryMessage').style.display = 'block';
+            }
+        }
+        
+        /**
+         * Función para limpiar todo el historial de descargas de localStorage.
+         */
+        function clearHistory() {
+            if (confirm("¿Estás seguro de que quieres borrar **todo** el historial de descargas? ¡Esta acción es irreversible!")) {
+                localStorage.removeItem('historialDescargas');
+                loadDownloadHistory(); // Recargar la lista para que muestre el mensaje de "no hay historial"
+                // Opcional: mostrar una pequeña notificación temporal de éxito
+                alert("✅ Historial borrado con éxito.");
+            }
+        }
+
+        // Cargar el historial cuando el DOM esté listo (además del onload en <body>)
+        document.addEventListener('DOMContentLoaded', loadDownloadHistory);
+    </script>
+</body>
+</html>
